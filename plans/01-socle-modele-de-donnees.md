@@ -78,7 +78,7 @@ configuration), then
 
 1. Copy the SQL script to `db/telemedicine.sql` (no spaces in the name).
 2. Create `docker-compose.yml` (start from the one in commit `618d581`):
-   - image `postgres:17`, database `telemedicine`, user/password `telemedicine`, port 5432.
+   - image `postgres:17`, database `telemedicine`, user `telemedicine`, port **5433** on the Mac (5432 is taken by the local PostgreSQL 18).
    - **add** a mount of `./db/telemedicine.sql` into `/docker-entrypoint-initdb.d/`
      so the schema **and** the test data load on first start.
    - a named volume for the data.
@@ -95,7 +95,7 @@ configuration), then
 
 1. Restore `wildfly/setup-datasource.sh` from commit `618d581`
    (`git checkout 618d581 -- wildfly/setup-datasource.sh`) and change the URL to:
-   `jdbc:postgresql://localhost:5432/telemedicine?stringtype=unspecified`
+   `jdbc:postgresql://localhost:5433/telemedicine?stringtype=unspecified`
 
    `stringtype=unspecified` is important: the SQL script uses PostgreSQL
    `ENUM` types. With this option, Java enums saved as text are accepted by
@@ -103,7 +103,7 @@ configuration), then
 
    > If `TelemedicineDS` already exists in your WildFly from earlier, do not run the
    > script again: only update the URL with jboss-cli:
-   > `/subsystem=datasources/data-source=TelemedicineDS:write-attribute(name=connection-url,value="jdbc:postgresql://localhost:5432/telemedicine?stringtype=unspecified")`
+   > `/subsystem=datasources/data-source=TelemedicineDS:write-attribute(name=connection-url,value="jdbc:postgresql://localhost:5433/telemedicine?stringtype=unspecified")`
    > then `:reload`.
 2. Fill `src/main/resources/META-INF/persistence.xml`:
    - unit `telemedicinePU`, `transaction-type="JTA"`,

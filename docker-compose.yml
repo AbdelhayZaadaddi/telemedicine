@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: telemedicine-postgres
+    environment:
+      POSTGRES_DB: telemedicine
+      POSTGRES_USER: telemedicine
+      POSTGRES_PASSWORD: abdelhay
+    ports:
+      # 5433 on the Mac -> 5432 in the container
+      # (5432 is used by the PostgreSQL 18 installed on the Mac)
+      - "5433:5432"
+    volumes:
+      - telemedicine-data:/var/lib/postgresql/data
+      - ./db/telemedicine.sql:/docker-entrypoint-initdb.d/telemedicine.sql
+
+volumes:
+  telemedicine-data:
